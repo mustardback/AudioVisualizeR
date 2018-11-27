@@ -4,8 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioAnalyzer : MonoBehaviour {
-    AudioSource audioSource;                 //Waveform in question
-    public static float[] samples = new float[512]; //Index 0 is bass, 512 is brilliance
+    AudioSource audioSource;
+    public static float[] samples = new float[512]; //Index 0 is bass, 511 is brilliance
     public static float[] freqBands = new float[16];
 
 	// Use this for initialization
@@ -42,6 +42,7 @@ public class AudioAnalyzer : MonoBehaviour {
 
             freqBands[i*2] = avg * 10;
         }
+
         //spheres 0,2,4,6,8,10,12,14,16 set, interpolate 1,3,5,7,9,11,13,15
         for (int i = 1; i < 16; i++)
         {

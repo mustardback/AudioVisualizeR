@@ -30,5 +30,9 @@ public class ParamStar : MonoBehaviour {
                 dir *= -1;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            maxVolume = 0;
+        }
     }
 }

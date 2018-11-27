@@ -14,7 +14,7 @@ public class AudioController : MonoBehaviour {
     private int trackIndex;
     // Use this for initialization
     void Start () {
-        songs[0] = song1; //pubt the songs in the list
+        songs[0] = song1; //put the songs in the list
         songs[1] = song2;
         songs[2] = song3;
         songs[3] = song4;
@@ -28,6 +28,7 @@ public class AudioController : MonoBehaviour {
         //------------------Track Change-------------------------------
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Next Track");
             trackIndex++;
             if (!(trackIndex >= 5))
             {
