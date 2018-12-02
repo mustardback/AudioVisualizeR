@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Distort By Texture B Preview
-  m_Shader: {fileID: 4800000, guid: 653b94b6d00b7ab4590961ca0fb84511, type: 3}
+  m_Shader: {fileID: 4800000, guid: 3116dc5d2d459014eb4d26279676bac8, type: 3}
   m_ShaderKeywords: _USEMIPMAPS_ON
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -19,25 +19,38 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _DistortionMapRG:
-        m_Texture: {fileID: 2800000, guid: 31f54f767549b5e47a8e10aee2e55daa, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 2, y: 2}
         m_Offset: {x: -0.25, y: 0}
-    - _MainTex:
+    - _Illum:
+        m_Texture: {fileID: 2800000, guid: 2e67ae7ca96773e4dae405d3691ad7a6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MKGlowTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Texture:
+    - _MainTex:
         m_Texture: {fileID: 2800000, guid: 9b5c35293e835e84eab33a6887bc527b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 441cd962e8e7e4847806b3c51a746385, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Bias: 0
     - _Blur: 0.28571427
     - _Distort: 0.64285713
+    - _EmissionLM: 0
     - _FadeToColor: 0
+    - _MKGlowPower: 2.5
+    - _MKGlowTexStrength: 1
     - _Mip: 2.8928573
     - _NoiseOffset: 0.1
     - _TextureSize: 128
     - _UseMipmaps: 1
     m_Colors:
     - _Color: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
+    - _MKGlowColor: {r: 1, g: 0, b: 0, a: 1}
+    - _MKGlowTexColor: {r: 1, g: 1, b: 1, a: 1}
