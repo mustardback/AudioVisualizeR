@@ -8,6 +8,7 @@ public class SceneNodeControl : MonoBehaviour {
     public Camera MainCamera;
     public GameObject AxisFrame;
     public GameObject pLight;
+    public GameObject TargetSphere, TargetStar, TargetHolder;
     List<Transform> mSelectedTransform = new List<Transform>();
     List<string> mTransformNames = new List<string>();
 
@@ -15,58 +16,55 @@ public class SceneNodeControl : MonoBehaviour {
     private int mSelectedIndex = 0;
     private GameObject xFrame, yFrame, zFrame;
     private GameObject xLight, yLight, zLight;
+    
     // Use this for initialization
-    void Start () {
-        //AxisFrame.GetComponent<Renderer>().enabled = false;
-        
+    void Start () {      
         xFrame = GameObject.Find("xAxis");
         yFrame = GameObject.Find("yAxis");
         zFrame = GameObject.Find("zAxis");
         xLight = GameObject.Find("Star_07-Trailed");
         yLight = GameObject.Find("Star_06-Trailed");
         zLight = GameObject.Find("Star_05-Trailed");
-        
-        Debug.Assert(TheRoot != null);
-
+        TargetSphere = GameObject.Find("TargetSphere");
+        TargetStar = GameObject.Find("TargetStar");
+        TargetHolder = GameObject.Find("TargetCubeHolder");        
         mSelectedTransform.Add(TheRoot.transform);
         mTransformNames.Add("RootNode");
-
         GetChildrenNames(TheRoot.transform);
         SetSelectedObject(TheRoot.transform);
         TurnOffAxisFrame();
         TurnOffAxisLight(xLight);
         TurnOffAxisLight(yLight);
         TurnOffAxisLight(zLight);
-        //foreach (string n in mTransformNames){
-        //    Debug.Log(mTransformNames); 
-        //} 
     }
-    //---------------------AxisFrame Calls-------------------------------------
+    //---------------------AxisFrame Calls---------------------------------------------------------
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     void TurnOffAxisFrame()
     {
         xFrame.GetComponent<Renderer>().enabled = false;
         yFrame.GetComponent<Renderer>().enabled = false;
         zFrame.GetComponent<Renderer>().enabled = false;
-    }    
+    }
+
     void TurnOnAxisFrame()
     {
         xFrame.GetComponent<Renderer>().enabled = true;
         yFrame.GetComponent<Renderer>().enabled = true;
         zFrame.GetComponent<Renderer>().enabled = true;
     }
+
     void TurnOnAxisLight(GameObject axisLight)
     {
         axisLight.GetComponent<Renderer>().enabled = true;   
     }
+
     void TurnOffAxisLight(GameObject axisLight)
     {
         axisLight.GetComponent<Renderer>().enabled = false;
     }
-    //-------------------------------------------------------------------------
-
+    
     void GetChildrenNames(Transform node)
-    {
-        //Debug.Log("GCN called for node " + node.name);        
+    {      
         for (int i = node.childCount - 1; i >= 0; i--)
         {
             Transform child = node.GetChild(i);
@@ -80,129 +78,78 @@ public class SceneNodeControl : MonoBehaviour {
         } 
     }
 
-
-    //private void UISetObjectXform(ref Vector3 p, ref Quaternion q)
-    //{
-    //    if (mSelected == null)
-    //        return;
-
-    //    if (T.isOn)
-    //    {
-    //        mSelected.localPosition = p;
-    //    }
-    //    else if (S.isOn)
-    //    {
-    //        mSelected.localScale = p;
-    //    }
-    //    else
-    //    {
-    //        mSelected.localRotation *= q;
-    //    }
-    //}
-
     // new object selected
-    public void SetSelectedObject(Transform xform) //SetSelectedObject(mSelectedTransform[index]);
+    public void SetSelectedObject(Transform xform)
     {
-        mSelected = xform;
-        
+        mSelected = xform;        
         if (xform != null)
         {
-            Debug.Log("Selected: " + mSelected);// ObjectName.text = "Selected:" + xform.name;
+            Debug.Log("Selected: " + mSelected);
         }        
     }
 
     void Update()
     {
+     //----------------------Node Selection--------------------------------------------------------
+     //////////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            // scroll up
-            // Debug.Log("Scroll up fired");
-            //mSelectedIndex++;
             mSelectedIndex = 0;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            // scroll up
             mSelectedIndex = 1;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            // scroll up
             mSelectedIndex = 2;
         }
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    // scroll down
-        //    // Debug.Log("Scroll down fired");
-        //    mSelectedIndex--;
-        //}
         mSelectedIndex %= mTransformNames.Count;
         mSelected = mSelectedTransform[mSelectedIndex];
         AxisFrame.transform.position = mSelected.transform.position;
         pLight.transform.position = mSelected.transform.position;
-        //Debug.Log(mSelectedIndex);
         Debug.Log(mTransformNames[mSelectedIndex] + " selected");
-
-        //--------------------Control Scheme--------------------------------------------
-        Vector3 V = mSelected.transform.position - MainCamera.transform.position;
-        if (Input.GetKey(KeyCode.RightArrow)) //push
+        //--------------------------------Control Scheme-------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        Vector3 V2C = mSelected.transform.position - MainCamera.transform.position;
+        Vector3 V2T = new Vector3(0f,0f,0f);
+        if (mSelectedIndex == 0)
         {
-            //Debug.Log("Zoom Out fired");
-            mSelected.transform.localPosition += V * 0.01f;
-            //AxisFrame.transform.position = mSelected.transform.position;
-            //AxisFrame.GetComponent<Renderer>().enabled = true;
+            V2T = TargetSphere.transform.position - mSelected.transform.position;
         }
-
-        if (Mathf.Abs(V.magnitude) > 5f) //pull
+        if (mSelectedIndex == 1)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            V2T = TargetStar.transform.position - mSelected.transform.position;
+        }
+        if (mSelectedIndex == 2)
+        {
+            V2T = TargetHolder.transform.position - mSelected.transform.position;
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        if (Input.GetKey(KeyCode.PageUp)) // Push from camera
+        {
+            mSelected.transform.localPosition += V2C * 0.01f;
+        }
+        if (Mathf.Abs(V2C.magnitude) > 5f) // Pull to camera
+        {
+            if (Input.GetKey(KeyCode.PageDown))
             {
-                //Debug.Log("Zoom In fired");
-                mSelected.transform.localPosition -= V * 0.01f;
-                //AxisFrame.transform.position = mSelected.transform.position;
-                //AxisFrame.GetComponent<Renderer>().enabled = true;
+                mSelected.transform.localPosition -= V2C * 0.01f;
             }
         }
-        //if (Input.GetKey(KeyCode.Z)) //right
-        //{
-        //    mSelected.transform.localPosition += mSelected.transform.right * 0.1f;
-        //}
-        //if (Input.GetKey(KeyCode.X)) //left
-        //{
-        //    mSelected.transform.localPosition -= mSelected.transform.right * 0.1f; 
-        //}
-
-        //if (Input.GetKey(KeyCode.E)) //rotate about Z, fix with Quaternions
-        //{
-        //    mSelected.transform.Rotate(mSelected.transform.forward, 0.35f);
-        //}
-        //if (Input.GetKey(KeyCode.R)) //rotate about X, fix with Quaternions
-        //{
-        //    mSelected.transform.Rotate(mSelected.transform.right, 0.35f);
-        //}
-        //if (Input.GetKey(KeyCode.T)) //rotate about Y, fix with Quaternions
-        //{
-        //    mSelected.transform.Rotate(mSelected.transform.up, 0.35f);
-        //}
-
-
-        //if (Input.GetKey(KeyCode.F)) //scale up
-        //{
-        //    mSelected.transform.localScale *= 1.1f;
-        //}
-        //if (Input.GetKey(KeyCode.G)) //scale down
-        //{
-        //    mSelected.transform.localScale *= 0.9f;
-        //}
-
-        if (Input.GetKey(KeyCode.T)) //Translate
+        if (Input.GetKey(KeyCode.RightArrow)) //Home in on target
         {
-            //axisframe.transform.position = mselected.transform.position;
-            //axisframe.getcomponent<renderer>().enabled = true;
+            mSelected.transform.position += V2T * 0.01f;
+        }               
+        if (Input.GetKey(KeyCode.LeftArrow)) //Home out from target
+        {
+            mSelected.transform.localPosition -= V2T * 0.01f;
+        }       
+        if (Input.GetKey(KeyCode.T)) //Translate
+        {            
             TurnOnAxisFrame();
             if (Input.GetKey(KeyCode.X)) //Translate X
-            {
-                Debug.Log("translation in X fired");
+            {         
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     //tx up
@@ -243,22 +190,16 @@ public class SceneNodeControl : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.R)) //Rotate
         {
-            //Get unrotated axis values!
+            //Unrotated axis values!
             float rXu = mSelected.transform.rotation.x;
             float rYu = mSelected.transform.rotation.y;
             float rZu = mSelected.transform.rotation.z;
-
-            //AxisFrame.transform.position = mSelected.transform.position;
-            //AxisFrame.GetComponent<Renderer>().enabled = true;
             TurnOnAxisFrame();
             if (Input.GetKey(KeyCode.X)) //Rotate X
             {
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     //rotate up
-                    //mSelected.transform.Rotate(mSelected.transform.right, 0.5f);
-                    //rX = rXu + 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rX, rYu, rZu);
                     float dx = rXu + 1f;
                     Quaternion q = Quaternion.AngleAxis(dx, Vector3.right);
                     mSelected.localRotation *= q;
@@ -266,9 +207,6 @@ public class SceneNodeControl : MonoBehaviour {
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
                     //rotate down
-                    //mSelected.transform.Rotate(mSelected.transform.right, -0.5f);
-                    //rX = rXu - 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rX, rYu, rZu);
                     float dx = rXu - 1f;
                     Quaternion q = Quaternion.AngleAxis(dx, Vector3.right);
                     mSelected.localRotation *= q;
@@ -279,9 +217,6 @@ public class SceneNodeControl : MonoBehaviour {
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     //rotate up
-                    //mSelected.transform.Rotate(mSelected.transform.up, 0.5f);
-                    //rY = rYu + 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rXu, rY, rZu);
                     float dy = rYu + 1f;
                     Quaternion q = Quaternion.AngleAxis(dy, Vector3.up);
                     mSelected.localRotation *= q;
@@ -289,9 +224,6 @@ public class SceneNodeControl : MonoBehaviour {
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
                     //rotate down
-                    //mSelected.transform.Rotate(mSelected.transform.up, -0.5f);
-                    //rY = rYu - 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rXu, rY, rZu);
                     float dy = rYu - 1f;
                     Quaternion q = Quaternion.AngleAxis(dy, Vector3.up);
                     mSelected.localRotation *= q;
@@ -302,9 +234,6 @@ public class SceneNodeControl : MonoBehaviour {
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     //rotate up
-                    //mSelected.transform.Rotate(mSelected.transform.forward, 0.5f);
-                    //rZ = rZu + 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rXu, rYu, rZ);
                     float dz = rZu + 1f;
                     Quaternion q = Quaternion.AngleAxis(dz, Vector3.forward);
                     mSelected.localRotation *= q;
@@ -312,9 +241,6 @@ public class SceneNodeControl : MonoBehaviour {
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
                     //rotate down
-                    //mSelected.transform.RotateAround(mSelected.transform.forward, -0.5f);
-                    //rZ = rZu - 1f;
-                    //mSelected.transform.rotation = Quaternion.Euler(rXu, rYu, rZ);
                     float dz = rZu - 1f;
                     Quaternion q = Quaternion.AngleAxis(dz, Vector3.forward);
                     mSelected.localRotation *= q;
@@ -323,21 +249,18 @@ public class SceneNodeControl : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.S)) //Scale
         {
-            //AxisFrame.transform.position = mSelected.transform.position;
-            //AxisFrame.GetComponent<Renderer>().enabled = true;
             TurnOnAxisFrame();
             if (Input.GetKey(KeyCode.UpArrow)) //Scale Up
-            {
-                //scale up
+            {                
                 mSelected.transform.localScale *= 1.1f;
             }
             if (Input.GetKey(KeyCode.DownArrow)) //Scale Down
             {
-                //scale down
                 mSelected.transform.localScale *= 0.9f;
             }
         }
-
+        //----------------------AxisFrame Lighting-------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKey(KeyCode.X))
         {
             TurnOnAxisLight(xLight);
@@ -350,13 +273,9 @@ public class SceneNodeControl : MonoBehaviour {
         {
             TurnOnAxisLight(zLight);
         }
-        //-----------------------------------------------------------------------------------
-        // Turn off axis frame/lights
         if (!(Input.GetKey(KeyCode.T)) && !(Input.GetKey(KeyCode.R)) && !(Input.GetKey(KeyCode.S))){
-            //AxisFrame.GetComponent<Renderer>().enabled = false;
             TurnOffAxisFrame();
         }
-
         if (!Input.GetKey(KeyCode.X)){
             TurnOffAxisLight(xLight);
         }
@@ -367,7 +286,9 @@ public class SceneNodeControl : MonoBehaviour {
         if (!Input.GetKey(KeyCode.Z))
         {
             TurnOffAxisLight(zLight);
-        }        
+        }
+        //--------------------------AxisFrame Alignment--------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////
         AxisFrame.transform.position = mSelected.transform.position;
         AxisFrame.transform.rotation = mSelected.transform.rotation;
     }

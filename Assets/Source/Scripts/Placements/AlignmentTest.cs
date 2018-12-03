@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AlignmentTest : MonoBehaviour {
-    public GameObject SphereNode;
-    public GameObject StarNode;
-    public GameObject HolderNode;
-    public GameObject SphereTarget;
-    public GameObject StarTarget;
-    public GameObject HolderTarget;
-    private GameObject SphereLight, StarLight, HolderLight;
+    public GameObject SphereNode, StarNode, HolderNode;        
+    public GameObject SphereTarget, StarTarget, HolderTarget;
+    public Material Material1, Material2, Material3, Material4, Material5;
+    public AudioSource AudioSource;
+    private GameObject NodeLight,SphereLight, StarLight, HolderLight;    
     private float dis;
+    
     // Use this for initialization
     void Start () {
-        dis = 5f;
+        dis = 1f;
         SphereLight = GameObject.Find("Sphere Point Light");
         StarLight = GameObject.Find("Star Point Light");
         HolderLight = GameObject.Find("Holder Point Light");
-        SphereLight.SetActive(false);
-        StarLight.SetActive(false);
-        HolderLight.SetActive(false);
+        NodeLight = GameObject.Find("Point Light");
     }
 	
 	// Update is called once per frame
@@ -30,34 +27,76 @@ public class AlignmentTest : MonoBehaviour {
 
         if (sphereV.magnitude < dis)
         {
-            SphereLight.SetActive(true);
+            //Indicate sphere alignment
+            //Debug.Log("Spheres aligned");            
+            SphereLight.GetComponent<Light>().color = Color.green;
         }
-        else
-        {
-            SphereLight.SetActive(false);
-        }
+        
 
         if (starV.magnitude < dis)
         {
-            StarLight.SetActive(true);
+            //Indicate star alignment
+            //Debug.Log("Stars aligned");
+            StarLight.GetComponent<Light>().color = Color.green;
+            float volume = 0f;
+            foreach (float band in AudioAnalyzer.freqBands)
+            {
+                volume += band;
+            }
+            float scaleVals = 1 + 0.01f * volume;
+            StarTarget.transform.localScale = new Vector3(scaleVals, scaleVals, scaleVals);
         }
-        else
-        {
-            StarLight.SetActive(false);
-        }
+        
 
         if (holderV.magnitude < dis)
         {
-            HolderLight.SetActive(true);
+            //Indicate holder alignment
+            //Debug.Log("Holders aligned");
+            HolderLight.GetComponent<Light>().color = Color.green;
+            float volume = 0f;
+            foreach (float band in AudioAnalyzer.freqBands)
+            {
+                volume += band;
+            }            
+            HolderTarget.transform.Rotate(Vector3.up, Time.deltaTime * 10 * volume);
         }
-        else
-        {
-            HolderLight.SetActive(false);
-        }
+        
 
         if ((sphereV.magnitude < dis) && (starV.magnitude < dis) && (holderV.magnitude < dis))
         {
-            Debug.Log("Alignment Achieved");
+            //Debug.Log("Total Alignment Achieved");
+            SphereLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
+            StarLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
+            HolderLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
+            NodeLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
+
+            //Change skybox material for effect
+            if (AudioSource.clip.name == "Beats Antique - Oriental Uno")
+            {
+                //RenderSettings.skybox = Material1;                
+                RenderSettings.skybox = Material1;
+                DynamicGI.UpdateEnvironment();
+            }                
+            if (AudioSource.clip.name == "Grimes - Genesis")
+            {
+                RenderSettings.skybox = Material2;
+                DynamicGI.UpdateEnvironment();
+            }
+            if (AudioSource.clip.name == "Karie Kahimi - Blue Orb")
+            {
+                RenderSettings.skybox = Material3;
+                DynamicGI.UpdateEnvironment();
+            }
+            if (AudioSource.clip.name == "Namco Sound Team - Katamari on the Swing")
+            {
+                RenderSettings.skybox = Material4;
+                DynamicGI.UpdateEnvironment();
+            }
+            if (AudioSource.clip.name == "Dave Brubeck - Take Five")
+            {
+                RenderSettings.skybox = Material5;
+                DynamicGI.UpdateEnvironment();
+            }
         }
     }
 }

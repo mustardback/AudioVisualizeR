@@ -19,16 +19,16 @@ public class ParamFract : MonoBehaviour {
         //Debug.Log(volume);
         if (Testing != 1)
         {
-            transform.Rotate(Vector3.back, Time.deltaTime * 5 * volume);
+            transform.Rotate(Vector3.back, Time.deltaTime * 30 * volume);
         }
         Mesh theMesh = GetComponent<MeshFilter>().mesh;
         Vector2[] uv = theMesh.uv;
 
         for (int i = 0; i < uv.Length; i++)
         {
-            uv[i].x += volume * 0.005f;
+            uv[i].x += volume * 0.0005f;
             uv[i].x = uv[i].x % 1;
-            uv[i].y += volume * 0.005f;
+            uv[i].y += volume * 0.0005f;
             uv[i].y = uv[i].y % 1;
         }
         theMesh.uv = uv;

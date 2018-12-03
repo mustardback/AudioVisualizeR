@@ -16,7 +16,7 @@ public class ParamFrame : MonoBehaviour {
         {
             volume += band;
         }        
-        float scaleVals = (volume * 0.01f) + 1;
+        float scaleVals = (volume * 0.1f) + 1;
         transform.localScale = new Vector3(scaleVals, scaleVals, scaleVals);
     }
 }

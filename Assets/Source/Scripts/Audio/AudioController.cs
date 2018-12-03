@@ -26,7 +26,7 @@ public class AudioController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //------------------Track Change-------------------------------
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || !AudioSource.isPlaying)
         {
             Debug.Log("Next Track");
             trackIndex++;
@@ -42,6 +42,12 @@ public class AudioController : MonoBehaviour {
                 AudioSource.Play();
             }
         }
-        //-------------------------------------------------------------
+        //-----------------Volume Change-------------------------------
+        if (Input.GetKeyDown(KeyCode.KeypadMinus)){
+            AudioSource.volume *= 0.9f;
+        }
+        if (Input.GetKeyDown(KeyCode.KeypadPlus)){
+            AudioSource.volume *= 1.1f;
+        }
     }
 }

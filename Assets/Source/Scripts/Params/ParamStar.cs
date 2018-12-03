@@ -5,12 +5,8 @@ using UnityEngine;
 public class ParamStar : MonoBehaviour {
     private float width;
     private int dir = 1;
-    //private Texture texture;
-    //private int channel;
 	// Use this for initialization
 	void Start () {
-        //texture = GetComponent<Renderer>().material.mainTexture;
-        //channel = GetComponent<NodePrimitive>().band;
 	}
 	
 	// Update is called once per frame
@@ -38,21 +34,6 @@ public class ParamStar : MonoBehaviour {
                 dir *= -1;
             }
         }
-
-        //texture mod
-        //Mesh theMesh = GetComponent<MeshFilter>().mesh;
-        //Vector2[] uv = theMesh.uv;
-
-        //for (int i = 0; i < uv.Length; i++)
-        //{
-        //    uv[i].x += AudioAnalyzer.freqBands[channel] * 0.01f;
-        //    uv[i].x = uv[i].x % 1;
-        //    uv[i].y += AudioAnalyzer.freqBands[channel] * 0.01f;
-        //    uv[i].y = uv[i].y % 1;
-        //}
-        //theMesh.uv = uv;
-
-
         //reset for song change
         if (Input.GetKeyDown(KeyCode.Space))
         {
