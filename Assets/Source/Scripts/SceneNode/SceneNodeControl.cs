@@ -90,8 +90,13 @@ public class SceneNodeControl : MonoBehaviour {
 
     void Update()
     {
-     //----------------------Node Selection--------------------------------------------------------
-     //////////////////////////////////////////////////////////////////////////////////////////////
+        mSelectedIndex %= mTransformNames.Count;
+        mSelected = mSelectedTransform[mSelectedIndex];
+        AxisFrame.transform.position = mSelected.transform.position;
+        pLight.transform.position = mSelected.transform.position;
+        Debug.Log(mTransformNames[mSelectedIndex] + " selected");
+        //----------------------Node Selection--------------------------------------------------------
+        //////////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             mSelectedIndex = 0;
@@ -103,16 +108,11 @@ public class SceneNodeControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             mSelectedIndex = 2;
-        }
-        mSelectedIndex %= mTransformNames.Count;
-        mSelected = mSelectedTransform[mSelectedIndex];
-        AxisFrame.transform.position = mSelected.transform.position;
-        pLight.transform.position = mSelected.transform.position;
-        Debug.Log(mTransformNames[mSelectedIndex] + " selected");
+        }        
         //--------------------------------Control Scheme-------------------------------------------
         ///////////////////////////////////////////////////////////////////////////////////////////
-        Vector3 V2H = mSelected.transform.position - Home.transform.position;
-        Vector3 V2T = new Vector3(0f,0f,0f);
+        Vector3 V2H = mSelected.transform.position - Home.transform.position; //vector to starting position
+        Vector3 V2T = new Vector3(0f,0f,0f); //vector to target
         if (mSelectedIndex == 0)
         {
             V2T = TargetSphere.transform.position - mSelected.transform.position;
@@ -126,11 +126,11 @@ public class SceneNodeControl : MonoBehaviour {
             V2T = TargetHolder.transform.position - mSelected.transform.position;
         }
         ///////////////////////////////////////////////////////////////////////////////////////////
-        if (Input.GetKey(KeyCode.PageUp)) // Push from camera
+        if (Input.GetKey(KeyCode.PageUp)) // Push to starting pos
         {
             mSelected.transform.localPosition += V2H.normalized * 0.01f;
         }
-        if (Mathf.Abs(V2H.magnitude) > 5f) // Pull to camera
+        if (Mathf.Abs(V2H.magnitude) > 5f) // Pull from camera
         {
             if (Input.GetKey(KeyCode.PageDown))
             {
@@ -273,9 +273,6 @@ public class SceneNodeControl : MonoBehaviour {
         {
             TurnOnAxisLight(zLight);
         }
-        if (!(Input.GetKey(KeyCode.T)) && !(Input.GetKey(KeyCode.R)) && !(Input.GetKey(KeyCode.S))){
-            TurnOffAxisFrame();
-        }
         if (!Input.GetKey(KeyCode.X)){
             TurnOffAxisLight(xLight);
         }
@@ -288,6 +285,7 @@ public class SceneNodeControl : MonoBehaviour {
             TurnOffAxisLight(zLight);
         }
         //--------------------------WMR Controls --------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetAxis("AXIS_2") > 0.001f) //LS, T.Y up
         {
             TurnOnAxisFrame();
@@ -373,7 +371,7 @@ public class SceneNodeControl : MonoBehaviour {
         //Homing towards target node or starting position
         mSelected.transform.position += V2T.normalized * Input.GetAxis("AXIS_10")*2f;
         mSelected.transform.localPosition += V2H.normalized * Input.GetAxis("AXIS_9")*2f;
-        if ((Input.GetAxis("AXIS_2") < 0.001f && Input.GetAxis("AXIS_2") > -0.001f) && (Input.GetAxis("AXIS_1") < 0.001f && Input.GetAxis("AXIS_1") > -0.001f) && (Input.GetAxis("AXIS_5") < 0.001f && Input.GetAxis("AXIS_5") > -0.001f) && (Input.GetAxis("AXIS_4") < 0.001f && Input.GetAxis("AXIS_4") > -0.001f))
+        if ((Input.GetAxis("AXIS_2") < 0.001f && Input.GetAxis("AXIS_2") > -0.001f) && (Input.GetAxis("AXIS_1") < 0.001f && Input.GetAxis("AXIS_1") > -0.001f) && (Input.GetAxis("AXIS_5") < 0.001f && Input.GetAxis("AXIS_5") > -0.001f) && (Input.GetAxis("AXIS_4") < 0.001f && Input.GetAxis("AXIS_4") > -0.001f) && !(Input.GetKey(KeyCode.T)) && !(Input.GetKey(KeyCode.R)) && !(Input.GetKey(KeyCode.S)))
         {
             TurnOffAxisFrame();
             TurnOffAxisLight(xLight);

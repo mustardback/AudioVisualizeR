@@ -17,7 +17,7 @@ Properties {
 SubShader {
 	Tags {"Queue"="AlphaTest" "IgnoreProjector"="True" "RenderType"="MKGlow"}
 	LOD 300
-
+    Cull off
 CGPROGRAM
 #pragma surface surf BlinnPhong alphatest:_Cutoff
 #pragma target 2.0

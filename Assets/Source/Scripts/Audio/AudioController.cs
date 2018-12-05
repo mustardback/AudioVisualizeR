@@ -51,7 +51,7 @@ public class AudioController : MonoBehaviour {
         {
             if (AudioSource.volume > 0.1f)
             {
-                AudioSource.volume *= 0.1f;
+                AudioSource.volume *= 0.9f;
             }
         }
     }
