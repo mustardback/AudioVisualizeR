@@ -177,11 +177,6 @@ MonoBehaviour:
   SphereTarget: {fileID: 1958755558}
   StarTarget: {fileID: 2121380349}
   HolderTarget: {fileID: 824956054}
-  Material1: {fileID: 2100000, guid: 9c8aa0e4c66fca34b82c5137d2fe8512, type: 2}
-  Material2: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  Material3: {fileID: 2100000, guid: 7f9351f13a4fe6740ba756f771d4be0e, type: 2}
-  Material4: {fileID: 2100000, guid: a84861d91477d4646a9ccb48ae41f54c, type: 2}
-  Material5: {fileID: 2100000, guid: 6fac9778eb5de8540bcfe5553bea8ef0, type: 2}
   AudioSource: {fileID: 593037648}
 --- !u!1 &22498712
 GameObject:
@@ -4151,6 +4146,7 @@ GameObject:
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
   - component: {fileID: 534669906}
+  - component: {fileID: 534669907}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -4227,6 +4223,17 @@ Skybox:
   m_GameObject: {fileID: 534669902}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: a84861d91477d4646a9ccb48ae41f54c, type: 2}
+--- !u!114 &534669907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a834b3f1759262b43bc3c59ddef43c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &537769231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: eca8b956ee803a84d8be3e786c30adab,
@@ -6975,7 +6982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TheRoot: {fileID: 1284955492}
-  MainCamera: {fileID: 534669904}
+  Home: {fileID: 487358746}
   AxisFrame: {fileID: 1226145014}
   pLight: {fileID: 1800947444}
   TargetSphere: {fileID: 1958755558}

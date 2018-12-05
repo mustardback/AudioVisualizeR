@@ -24,7 +24,7 @@ public class TrackTitleBehavior : MonoBehaviour {
         {
             GetComponent<TextMesh>().text = "";
         }
-        if (Input.GetKeyDown(KeyCode.Space) || !AudioSource.isPlaying)//reset delay
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 16") || Input.GetKeyDown("joystick button 17") || !AudioSource.isPlaying)//reset delay
         {           
             delay = 0f;            
         }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SceneNodeControl : MonoBehaviour {
     public SceneNode TheRoot = null;
-    public Camera MainCamera;
+    public GameObject Home;
     public GameObject AxisFrame;
     public GameObject pLight;
     public GameObject TargetSphere, TargetStar, TargetHolder;
@@ -16,7 +16,7 @@ public class SceneNodeControl : MonoBehaviour {
     private int mSelectedIndex = 0;
     private GameObject xFrame, yFrame, zFrame;
     private GameObject xLight, yLight, zLight;
-    
+
     // Use this for initialization
     void Start () {      
         xFrame = GameObject.Find("xAxis");
@@ -111,7 +111,7 @@ public class SceneNodeControl : MonoBehaviour {
         Debug.Log(mTransformNames[mSelectedIndex] + " selected");
         //--------------------------------Control Scheme-------------------------------------------
         ///////////////////////////////////////////////////////////////////////////////////////////
-        Vector3 V2C = mSelected.transform.position - MainCamera.transform.position;
+        Vector3 V2H = mSelected.transform.position - Home.transform.position;
         Vector3 V2T = new Vector3(0f,0f,0f);
         if (mSelectedIndex == 0)
         {
@@ -128,13 +128,13 @@ public class SceneNodeControl : MonoBehaviour {
         ///////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKey(KeyCode.PageUp)) // Push from camera
         {
-            mSelected.transform.localPosition += V2C * 0.01f;
+            mSelected.transform.localPosition += V2H.normalized * 0.01f;
         }
-        if (Mathf.Abs(V2C.magnitude) > 5f) // Pull to camera
+        if (Mathf.Abs(V2H.magnitude) > 5f) // Pull to camera
         {
             if (Input.GetKey(KeyCode.PageDown))
             {
-                mSelected.transform.localPosition -= V2C * 0.01f;
+                mSelected.transform.localPosition -= V2H.normalized * 0.01f;
             }
         }
         if (Input.GetKey(KeyCode.RightArrow)) //Home in on target
@@ -287,6 +287,99 @@ public class SceneNodeControl : MonoBehaviour {
         {
             TurnOffAxisLight(zLight);
         }
+        //--------------------------WMR Controls --------------------------------------------------
+        if (Input.GetAxis("AXIS_2") > 0.001f) //LS, T.Y up
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(yLight);
+            mSelected.transform.localPosition -= mSelected.transform.up * Input.GetAxis("AXIS_2");
+        }
+        if (Input.GetAxis("AXIS_2") < -0.001f) //LS, T.Y down
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(yLight);
+            mSelected.transform.localPosition -= mSelected.transform.up * Input.GetAxis("AXIS_2");
+        }
+        if (Input.GetAxis("AXIS_1") > 0.001f) //LS, T.X right
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(xLight);
+            mSelected.transform.localPosition += mSelected.transform.right * Input.GetAxis("AXIS_1");
+        }
+        if (Input.GetAxis("AXIS_1") < -0.001f) //LS, T.X left
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(xLight);
+            mSelected.transform.localPosition += mSelected.transform.right * Input.GetAxis("AXIS_1");
+        }
+        if (Input.GetAxis("AXIS_5") > 0.001f) //RS, R.Y right
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(yLight);
+            float rYu = mSelected.transform.rotation.y;
+            float dy = rYu + 2f;
+            Quaternion q = Quaternion.AngleAxis(dy, Vector3.up);
+            mSelected.localRotation *= q;
+        }
+        if (Input.GetAxis("AXIS_5") < -0.001f) //RS, R.Y left
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(yLight);
+            float rYu = mSelected.transform.rotation.y;
+            float dy = rYu - 2f;
+            Quaternion q = Quaternion.AngleAxis(dy, Vector3.up);
+            mSelected.localRotation *= q;
+        }
+        if (Input.GetAxis("AXIS_4") > 0.001f) //RS, R.X up
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(xLight);
+            float rXu = mSelected.transform.rotation.x;
+            float dx = rXu + 2f;
+            Quaternion q = Quaternion.AngleAxis(dx, Vector3.right);
+            mSelected.localRotation *= q;
+        }
+        if (Input.GetAxis("AXIS_4") < -0.001f) //RS, R.X down
+        {
+            TurnOnAxisFrame();
+            TurnOnAxisLight(xLight);
+            float rXu = mSelected.transform.rotation.x;
+            float dx = rXu - 2f;
+            Quaternion q = Quaternion.AngleAxis(dx, Vector3.right);
+            mSelected.localRotation *= q;
+        }
+        if (Input.GetKeyDown("joystick button 4")) //L Grip, select previous node
+        {
+            if (mSelectedIndex == 0)
+            {
+                mSelectedIndex = 2;
+            }
+            else
+            {
+                mSelectedIndex--;
+            }
+        }
+        if (Input.GetKeyDown("joystick button 5")) //R Grip, select next node
+        {
+            if (mSelectedIndex == 2)
+            {
+                mSelectedIndex = 0;
+            }
+            else
+            {
+                mSelectedIndex++;
+            }
+        }
+        //Homing towards target node or starting position
+        mSelected.transform.position += V2T.normalized * Input.GetAxis("AXIS_10")*2f;
+        mSelected.transform.localPosition += V2H.normalized * Input.GetAxis("AXIS_9")*2f;
+        if ((Input.GetAxis("AXIS_2") < 0.001f && Input.GetAxis("AXIS_2") > -0.001f) && (Input.GetAxis("AXIS_1") < 0.001f && Input.GetAxis("AXIS_1") > -0.001f) && (Input.GetAxis("AXIS_5") < 0.001f && Input.GetAxis("AXIS_5") > -0.001f) && (Input.GetAxis("AXIS_4") < 0.001f && Input.GetAxis("AXIS_4") > -0.001f))
+        {
+            TurnOffAxisFrame();
+            TurnOffAxisLight(xLight);
+            TurnOffAxisLight(yLight);
+            TurnOffAxisLight(zLight);
+        }                
         //--------------------------AxisFrame Alignment--------------------------------------------
         ///////////////////////////////////////////////////////////////////////////////////////////
         AxisFrame.transform.position = mSelected.transform.position;

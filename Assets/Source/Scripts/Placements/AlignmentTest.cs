@@ -5,7 +5,6 @@ using UnityEngine;
 public class AlignmentTest : MonoBehaviour {
     public GameObject SphereNode, StarNode, HolderNode;        
     public GameObject SphereTarget, StarTarget, HolderTarget;
-    public Material Material1, Material2, Material3, Material4, Material5;
     public AudioSource AudioSource;
     private GameObject NodeLight,SphereLight, StarLight, HolderLight;    
     private float dis;
@@ -47,7 +46,6 @@ public class AlignmentTest : MonoBehaviour {
             StarTarget.transform.localScale = new Vector3(scaleVals, scaleVals, scaleVals);
         }
         
-
         if (holderV.magnitude < dis)
         {
             //Indicate holder alignment
@@ -69,34 +67,6 @@ public class AlignmentTest : MonoBehaviour {
             StarLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
             HolderLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
             NodeLight.GetComponent<Light>().color = new Color(0.5411f, 0.0588f, 0.3372f);
-
-            //Change skybox material for effect
-            if (AudioSource.clip.name == "Beats Antique - Oriental Uno")
-            {
-                //RenderSettings.skybox = Material1;                
-                RenderSettings.skybox = Material1;
-                DynamicGI.UpdateEnvironment();
-            }                
-            if (AudioSource.clip.name == "Grimes - Genesis")
-            {
-                RenderSettings.skybox = Material2;
-                DynamicGI.UpdateEnvironment();
-            }
-            if (AudioSource.clip.name == "Karie Kahimi - Blue Orb")
-            {
-                RenderSettings.skybox = Material3;
-                DynamicGI.UpdateEnvironment();
-            }
-            if (AudioSource.clip.name == "Namco Sound Team - Katamari on the Swing")
-            {
-                RenderSettings.skybox = Material4;
-                DynamicGI.UpdateEnvironment();
-            }
-            if (AudioSource.clip.name == "Dave Brubeck - Take Five")
-            {
-                RenderSettings.skybox = Material5;
-                DynamicGI.UpdateEnvironment();
-            }
         }
     }
 }

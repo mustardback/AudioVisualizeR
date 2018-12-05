@@ -26,7 +26,7 @@ public class AudioController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //------------------Track Change-------------------------------
-        if (Input.GetKeyDown(KeyCode.Space) || !AudioSource.isPlaying)
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 16") || Input.GetKeyDown("joystick button 17") || !AudioSource.isPlaying)
         {
             Debug.Log("Next Track");
             trackIndex++;
@@ -43,10 +43,12 @@ public class AudioController : MonoBehaviour {
             }
         }
         //-----------------Volume Change-------------------------------
-        if (Input.GetKeyDown(KeyCode.KeypadMinus)){
+        if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetAxis("AXIS_18") < -0.001f || Input.GetAxis("AXIS_19") < -0.001f)
+        {
             AudioSource.volume *= 0.9f;
         }
-        if (Input.GetKeyDown(KeyCode.KeypadPlus)){
+        if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetAxis("AXIS_18") > 0.001f || Input.GetAxis("AXIS_19") > 0.001f)
+        {
             AudioSource.volume *= 1.1f;
         }
     }
