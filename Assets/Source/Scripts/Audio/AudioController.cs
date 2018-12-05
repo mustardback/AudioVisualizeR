@@ -45,11 +45,14 @@ public class AudioController : MonoBehaviour {
         //-----------------Volume Change-------------------------------
         if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetAxis("AXIS_18") < -0.001f || Input.GetAxis("AXIS_19") < -0.001f)
         {
-            AudioSource.volume *= 0.9f;
+            AudioSource.volume *= 1.1f;
         }
         if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetAxis("AXIS_18") > 0.001f || Input.GetAxis("AXIS_19") > 0.001f)
         {
-            AudioSource.volume *= 1.1f;
+            if (AudioSource.volume > 0.1f)
+            {
+                AudioSource.volume *= 0.1f;
+            }
         }
     }
 }
